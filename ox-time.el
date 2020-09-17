@@ -94,29 +94,7 @@
 
 \\fi
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-%% content definition %%
-%%%%%%%%%%%%%%%%%%%%%%%%
 
-\\title{Title of the invoice}
-\\date{\\today }
-\\xdef\\invoicenum{001}
-\\xdef\\companyname{Comp.}
-\\xdef\\companyaddress{foo, bar street, XXXXX City}
-\\xdef\\companysiren{XXX XXXX XXXX}
-\\xdef\\companytel{XX\\,XX\\,XX\\,XX\\,XX}
-\\xdef\\companyemail{xxx@xxx.xxx}
-\\xdef\\bankiban{XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX}
-\\xdef\\bankbic{XXX\\,XXX\\,XXX}
-\\long\\xdef\\conditions{write the sell conditions here
-
-on several lines}
-
-\\makeatletter
-\\let\\thetitle\\@title
-\\makeatother
-
-\\usepackage[pdfencoding=auto,unicode, bookmarks=false, colorlinks=false, pdfborder={0 0 0},pdftitle={Invoice from XXX}, pdfauthor={XXX}, pdfsubject={Invoice}, pdfkeywords={Invoice, XXX}]{hyperref}
 \\pagestyle{empty}
 \\usepackage[table]{xcolor}
 \\usepackage{longtable}
@@ -124,6 +102,7 @@ on several lines}
 \\usepackage{tabu}
 \\usepackage{multicol}
 \\usepackage[norule]{footmisc}
+\\RequirePackage{graphicx}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %% color definitions %%
@@ -168,26 +147,16 @@ on several lines}
 (org-export-define-derived-backend 'time 'latex
   :options-alist
   '((:latex-class "LATEX_CLASS" nil "time" t)
-    (:present "PRESENT" nil nil)
-    (:absent "ABSENT" nil nil)
-    (:excuse "EXCUSE" nil nil)
-    (:secretaire "SECRETAIRE" nil nil t)
-    (:secretaire "SECRETARY" nil nil t)
-    (:dure "DURE" nil " ")
-    (:dure "DURATION" nil " ")
-    (:ou "OU" nil " ")
-    (:ou "WHERE" nil " ")
-    (:quand "QUAND" nil " ")
-    (:quand "WHEN" nil " ")
-    (:initiateur "INITIATEUR" nil " ")
-    (:initiateur "INITIATOR" nil " ")
-    (:projet "PROJET" nil " ")
-    (:projet "PROJECT" nil " ")
+    (:comp "COMP" nil "Delta" t)
+    (:client "CLIENT" nil nil)
+    (:contact "CONTACT" nil nil)
+    (:fact "FACT" nil nil)
+    (:tel "TEL" nil "0692 339108" t)
+    (:adress "ADRESS" nil nil)
+    (:email "EMAIL" nil nil t)
     (:with-toc nil "toc" 1 )
     (:latex-hyperref-p nil "texht" org-latex-with-hyperref t)
-    (:resume "resume" nil nil)
-    (:logo "LOGO" nil " ")
-    (:style "STYLE" nil nil))
+    (:logo "LOGO" nil " "))
   :translate-alist '((template . ox-time-template))
   :menu-entry
   '(?t "Export to Time layout"
@@ -235,31 +204,51 @@ on several lines}
 "(when (plist-get info :org-latex-with-hyperref)
    (format "{%s}" (plist-get info :org-latex-with-hyperref) ))"
 
+%% content definition %<-------------------------------
+
+\\title{"(org-export-data titre info)"}
+\\date{\\today }
+\\xdef\\invoicenum{"(when (plist-get info :fact)
+   (format "%s" (plist-get info :fact) ))"}
+\\xdef\\companyname{"(when (plist-get info :comp)
+   (format "%s" (plist-get info :comp) ))"}
+\\xdef\\companyaddress{"(when (plist-get info :adress)
+   (format "%s" (plist-get info :adress) ))"}
+
+\\xdef\\companytel{"(when (plist-get info :tel)
+   (format "%s" (plist-get info :tel) ))"}
+\\xdef\\companyemail{"(when (plist-get info :email)
+   (format "%s" (plist-get info :email) ))"}
+\\xdef\\bankiban{XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX}
+\\xdef\\bankbic{XXX\\,XXX\\,XXX}
+\\long\\xdef\\conditions{write the sell conditions here
+on several lines}
+
+\\makeatletter
+\\let\\thetitle\\@title
+\\makeatother
+
+%% DOCUMENT %<-----------------------------------------
 \\begin{document}
 
-\\parbox[b][2cm][t]{\\rightalignment}{{\\color{gray!95}\\displayFont\\fontsize{1.5cm}{1.5cm}\\selectfont %%
-\\vbox to 1cm{\\vss %%
-%%
-\\companyname{}%%
-%%
-}}
-\\vskip 3mm%%
-{\\fontsize{0.44cm}{0.5cm}%%
-\\emph{thank you for your confidence!}%%
-}
-}%%
-%%
-\\parbox[b][2cm][t]{0.35\\textwidth}{\\ttfamily {%%
-{\\color{gray!95}\\fontsize{1.5cm}{1.5cm}\\selectfont %%
-\\vbox to 1cm{\\vss \\leavevmode \\kern -1mm %%
-%%
-Invoice%%
-%%
-}}}}
+\\noindent\\begin{minipage}{0.3\\textwidth}%% adapt widths of minipages to your needs
+\\includegraphics[height=70px,width=70px,keepaspectratio]{"(when (plist-get info :logo)
+   (format "%s" (plist-get info :logo) ))"}
+\\end{minipage}%%
+\\hfill%
+\\begin{minipage}{0.6\\textwidth}\\raggedleft
+
+  \\ttfamily{
+  {\\color{gray!95}\\fontsize{1.5cm}{1.5cm}\\selectfont %%
+  \\vbox to 1cm{\\vss \\leavevmode \\kern -1mm
+  Chronologie
+  }}}
+
+\\end{minipage}
 
 \\kern -5mm
 
-\\leavevmode\\kern \\rightalignment \\parbox{0.35\\textwidth}{\\ttfamily N\\textsuperscript{o} \\invoicenum\\\\
+\\leavevmode\\kern \\rightalignment \\parbox{0.35\\textwidth}{\\ttfamily Facture Associée N\\textsuperscript{o} \\invoicenum\\\\
 \\today }
 
 \\vskip 0.7cm
@@ -268,14 +257,15 @@ Invoice%%
   \\kern 1mm\\begin{minipage}[t]{0.5\\textwidth}
     \\color{white}
     \\vskip 2mm
-    Company \\textbf{Foo},\\\\
-    Temple Bar,\\\\
-    Dublin.\\\\
+    Client  : \\textbf{"(when (plist-get info :client)
+   (format "%s" (plist-get info :client) ))"}\\\\
+    Contact : \\textbf{"(when (plist-get info :contact)
+   (format "%s" (plist-get info :contact) ))"}\\\\
     \\vspace*{-3mm}%%
   \\end{minipage}
 }
 
-\\vskip 2.3cm
+\\vskip 2cm
 
 \\begin{center}
 {\\ttfamily\\LARGE \\thetitle}
@@ -289,19 +279,13 @@ Invoice%%
 
 \\small
 
-\\setlength{\columnsep}{1.5cm}
+\\setlength{\\columnsep}{1.5cm}
 \\begin{multicols}{2}
-\\noindent\\companyname{},\\\\
-Auto-entrepreneur {\\small (APE XXXXX)},\\\\
-\\companyaddress{},\\\\
-SIREN\\,: \\companysiren{},\\\\
-\\hbox to 1cm{Tél\\,:\\hss} \\companytel,\\\\
-\\hbox to 1cm{Mél\\,:\\hss} \\companyemail,\\\\
-\\hbox to 1cm{IBAN\\,:\\hss} \\bankiban,\\\\
-\\hbox to 1cm{BIC\\,:\\hss} \\bankbic
+\\noindent\\companyname{}\\\\
+\\companyaddress{}\\\\
+\\hbox to 1cm{Tél\\,:\\hss} \\companytel\\\\
+\\hbox to 1cm{Mél\\,:\\hss} \\companyemail\\\\
 \\end{multicols}
-
-\\footnotestyle{\\textbf{Conditions de paiement:} \\conditions }
 
 \\end{document}
 "))))
