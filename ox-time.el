@@ -40,6 +40,12 @@
 (require 'ox)
 (require 'cl-lib)
 
+(setq org-latex-packages-alist
+      '(("" "booktabs" t)
+        ("" "siunitx" t)
+        ("" "longtable" t)
+        ))
+
 (add-to-list 'org-latex-packages-alist
              '("AUTO" "babel" t ("pdflatex")))
 
@@ -94,12 +100,8 @@
 
 \\fi
 
-
-\\pagestyle{empty}
 \\usepackage[table]{xcolor}
-\\usepackage{longtable}
 \\usepackage{array}
-\\usepackage{tabu}
 \\usepackage{multicol}
 \\usepackage[norule]{footmisc}
 \\RequirePackage{graphicx}
@@ -127,9 +129,16 @@
   \\parindent 1em\\noindent
   \\hb@xt@1.8em{%%
   \\hss\\@textsuperscript{\\normalfont\\color{footnotegray}\\@thefnmark}}#1}
+
+
+%%	TABLE FORMATTING
+%%----------------------------------------------------------------------------------------
+\\newcommand{\\tableHeaderStyle}{
+    \\rowfont{\\leavevmode\\color{black}\\bfseries}
+    \\rowcolor{headcolor}
+}
+
 \\makeatother
-
-
 
 " ;;import de la feuille de syle dans texmf
                ("\\section{%s}" . "\\section*{%s}")
@@ -159,7 +168,7 @@
     (:logo "LOGO" nil " "))
   :translate-alist '((template . ox-time-template))
   :menu-entry
-  '(?t "Export to Time layout"
+  '(?T "Export to Time layout"
        ((?l "As LaTeX file" ox-time-export-to-latex)
         (?p "As PDF file" ox-time-export-to-pdf)
         (?o "As PDF and Open"
@@ -218,7 +227,7 @@
 \\xdef\\companytel{"(when (plist-get info :tel)
    (format "%s" (plist-get info :tel) ))"}
 \\xdef\\companyemail{"(when (plist-get info :email)
-   (format "%s" (plist-get info :email) ))"}
+                        (format "%s" (plist-get info :email) ))"}
 \\xdef\\bankiban{XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX\\,XXXX}
 \\xdef\\bankbic{XXX\\,XXX\\,XXX}
 \\long\\xdef\\conditions{write the sell conditions here
@@ -227,6 +236,8 @@ on several lines}
 \\makeatletter
 \\let\\thetitle\\@title
 \\makeatother
+
+\\pagestyle{empty}
 
 %% DOCUMENT %<-----------------------------------------
 \\begin{document}
