@@ -5,7 +5,7 @@
 ;; URL: https://github.com/DarkBuffalo/ox-time
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "24.4"))
-;; Keywords: org, outlines, exporter, meeting, minutes
+;; Keywords: org, outlines, exporter
 
 ;;; Commentary:
 ;;
@@ -27,13 +27,7 @@
 ;;   #+title:Readme ox-time
 ;;   #+author: Matthias David
 ;;   #+options: toc:nil
-;;   #+ou:Zoom
-;;   #+quand: 20/2/2021
-;;   #+projet: ox-time
-;;   #+absent: C. Robert,T. tartanpion
-;;   #+present: K. Soulet,I. Payet
-;;   #+excuse:Sophie Fonsec,Karine Soulet
-;;   #+logo: logo.png
+;;
 ;;
 ;;; Code:
 

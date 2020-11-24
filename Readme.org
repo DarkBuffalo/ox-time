@@ -1,8 +1,6 @@
 #+title:OX-TIME
 #+author: Matthias David
 
-[[https://melpa.org/#/ox-report][file:https://melpa.org/packages/ox-report-badge.svg]]
-
 #+caption: Header of pdf
 #+attr_latex: :width 300px
 [[file:img/header.png]]
@@ -11,7 +9,17 @@
 -----
 
 * INSTALLATION
+If you use =use-package=, you can do the below instead:
+#+BEGIN_SRC emacs-lisp
+(use-package ox-report
+  :load-path "~/Dropbox/emacs/lib/ox-notes")
+#+END_SRC
 
+If you use Doom Emacs :
+#+BEGIN_SRC emacs-lisp
+(package! ox-report
+  :recipe (:host github :repo "DarkBuffalo/ox-report"))
+#+END_SRC
 
 * PREREQUISITES
 ** Linux
@@ -27,46 +35,90 @@
 To configure the export we use the metadata of the org file
 ** standard
 #+BEGIN_SRC org
-#+title:Readme ox-time
-#+author: Matthias David
+#+title: Transfert domaine 1 -> domaine 2
+#+author: Matt
 #+options: toc:nil
+#+COMP: DELTA
+#+CLIENT: TARTANPION
+#+CONTACT: Mireille TONLOTO
+#+LOGO: ./../logoDelta.png
+#+FACT: 2018-0019
+#+TEL: 0700000000
+#+EMAIL: robert@societe.com
 #+END_SRC
 
+or use subtree
 
-** Language
-#+BEGIN_SRC emacs-lisp
-#+language: fr
-#+END_SRC
-or
-#+BEGIN_SRC emacs-lisp
-#+language: en
-#+END_SRC
+** Subtree
+if you want to export only a subtree, just use the =PROPERTIES= drawer and put =EXPORT_= in front of each key.
+Example:
+#+begin_src org
+:PROPERTIES:
+:EXPORT_TITLE: Transfert domaine 1 -> domaine 2
+:EXPORT_COMP: Delta
+:EXPORT_CLIENT: TARTANPION
+:EXPORT_CONTACT: Mireille TONLOTO
+:EXPORT_LOGO: ./../logoDelta.png
+:EXPORT_FACT: 2018-0019
+:EXPORT_TEL: 0700000000
+:EXPORT_EMAIL: robert@societe.com
+:EXPORT_FILE_NAME: HORODOTAGE
+:END:
+#+end_src
 
-** Use Yasnippet
-#+BEGIN_SRC org
-# -*- mode: snippet -*-
-# name: report
-# uuid:
-# key: report
-# condition: t
-# --
-#+title: ${1:Titre}
-#+author: ${2:Auteur}
-#+options: toc:nil
-#+where: ${3:Ou}
-#+when: ${4:Date}
-#+present: ${5:Sophie Fonsec}
-#+initiator: ${6:Matthias DAVID}
-#+project: ${7:Secret project}
-#+duration: ${8:2H}
-#+logo: logo.png
-#+END_SRC
+* Example
+
+#+begin_src org
+* Transfert de domaine 1 à domaine 2
+:PROPERTIES:
+:EXPORT_TITLE: Transfert domaine 1 -> domaine 2
+:EXPORT_COMP: Delta
+:EXPORT_CLIENT: TARTANPION
+:EXPORT_CONTACT: Mireille TONLOTO
+:EXPORT_LOGO: ./../logoDelta.png
+:EXPORT_FACT: 2018-0019
+:EXPORT_TEL: 0700000000
+:EXPORT_EMAIL: robert@societe.com
+:EXPORT_FILE_NAME: HORODOTAGE
+:END:
+
+#+latex_header: \usepackage{tabularx}
+#+ATTR_LATEX: :align Xrr :width \textwidth :environment tabularx
+#+LATEX: \rowcolors[] {2}{white}{tablecolor2} \renewcommand{\arraystretch}{2}
+#+BEGIN: clocktable :scope subtree :maxlevel 5
+#+CAPTION: Horodatage sommaire à [2020-11-24 mar. 20:53]
+#+ATTR_LATEX: :align Xrr :width \textwidth :environment tabularx
+| En-tête                                     | Durée  |      |
+|---------------------------------------------+--------+------|
+| *Durée totale*                              | *8:16* |      |
+|---------------------------------------------+--------+------|
+| Transfert de domaine 1 à domaine 2          | 8:16   |      |
+| \_  Mis à jour de Wordpress et des...       |        | 0:18 |
+| \_  Sauvegarde des sites                    |        | 0:11 |
+| \_  Transfert par FTP, Mis a jour BDD et... |        | 7:47 |
+#+END:
 
 
-* CHANGELOG
+** Mis à jour de Wordpress et des extensions                           :noexport:
+:LOGBOOK:
+CLOCK: [2020-11-19 jeu. 18:18]--[2020-11-19 jeu. 18:36] =>  0:18
+:END:
+** Sauvegarde des sites                                                :noexport:
+:LOGBOOK:
+CLOCK: [2020-11-19 jeu. 18:36]--[2020-11-19 jeu. 18:47] =>  0:11
+:END:
+** Transfert par FTP, Mis a jour BDD et réparation de la mise en page  :noexport:
+:LOGBOOK:
+CLOCK: [2020-11-23 lun. 08:28]--[2020-11-23 lun. 16:15] =>  7:47
+:END:
+** Détails technique
+*** Connexion à la base de donnée
+  | Serveur         | Utilisateur | Pass     |
+  |-----------------+-------------+----------|
+  | patate.mysql.db | patate      | potatoes |
 
-** v0.1 <08.2020>
-*** Features
+#+end_src
+
 
 
 * CONTRIBUTING
