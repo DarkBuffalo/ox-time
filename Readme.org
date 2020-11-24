@@ -33,7 +33,7 @@ If you use Doom Emacs :
 
 * CONFIGURATION
 To configure the export we use the metadata of the org file
-** standard
+** Metadata
 #+BEGIN_SRC org
 #+title: Transfert domaine 1 -> domaine 2
 #+author: Matt
@@ -134,3 +134,4 @@ CLOCK: [2020-11-23 lun. 08:28]--[2020-11-23 lun. 16:15] =>  7:47
 GPLv3.
 
 * THANKS
+- Elie Roux https://github.com/eroux/latex-yait for the latex template.
